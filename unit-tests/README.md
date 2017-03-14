@@ -162,7 +162,6 @@ public void SaveTodoItem_WithValidTitleAndDescription_ReturnsTodoItemWithGenerat
 {
     // Arrange
     var todoItem = GetTodoItemWithTitleAndDescription(title: "Update README.md", description: "Organize it better dude!");
-
     var todoItemService = GetMockedTodoItemService();
 
     // Act

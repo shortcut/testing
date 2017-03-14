@@ -28,7 +28,7 @@ When deciding on a unit testing strategy or choosing what to test:
     1. Is it important to have X % coverage?
     2. 
 * Highest risk (riskiest code) often equals highest value and is sure to touch a lot of your code, which in turn gives you a lot of coverage
-* If you already have a project and want to do add unit tests to do, map out what are the most important parts (highest risk / highest value) and prioritize these to figure out where to start.
+* If you already have a project and want to add unit tests to it, map out what are the most important parts (highest risk / highest value) and prioritize these to figure out where to start.
 
 ## Prerequisites of effective unit testing
 * Clean code

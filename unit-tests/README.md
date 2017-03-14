@@ -3,6 +3,10 @@
 In this folder we'll provide a set of real world examples in different languages/platforms.
 
 ## Checklist when writing unit tests
+* 1
+* 2
+* 3
+* 4
 
 ## Naming a test
 The name of the test should be consistent and meaningful. What are you testing and what you expect the result to be?

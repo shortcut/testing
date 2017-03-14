@@ -3,10 +3,16 @@
 In this folder we'll provide a set of real world examples in different languages/platforms.
 
 ## Checklist when writing unit tests
-* 1
-* 2
-* 3
-* 4
+This is a checklist you can use to proof your unit tests.
+
+My unit test:
+1. Name describes the scenario being tested with conditions and the expected result
+2. Uses the Arrange, Act and Assert pattern
+3. Is a state, value or interaction test
+4. Fakes all dependencies
+5. Mocks at most one dependency
+6. Favors public methods
+7. Asserts against one object
 
 ## What is a Unit Test?
 There are different ways of defining what a Unit is:
@@ -36,7 +42,7 @@ When deciding on a unit testing strategy or choosing what to test:
 * Understanding of unit testing
 
 ## Naming a test
-The name of the test should be consistent, meaningful and can be read like a sentence. What are you testing and what is the expected result to be?
+The name of the test should be consistent, meaningful and can be read like a sentence. What are you testing and what is the expected result?
 
 One naming convention is the three part naming convention: **UnitOfWork** _ **InitialCondition** _ **ExpectedResult**
 
@@ -46,7 +52,7 @@ One naming convention is the three part naming convention: **UnitOfWork** _ **In
 
 **ExpectedResult**: What is the expected result? Should we get a list of objects, a bool value etc?
 
-Creating names in this fashion makes tests like reading the business rules.
+Creating names in this fashion makes tests just like reading the business rules.
 
 Examples of non-descriptive names:
 
@@ -103,6 +109,7 @@ A good, descriptive and meaningful name along with a small, simple and clear bod
 
 ### Flexible
 * Write tests that target public methods. Don't focus on private methods or hidden methods. Those should be hit when hitting public APIs.
+* Testing non-public methods / contracts can create a state where refactoring your code becomes painful because you also have to update and maintain your unit tests.
 
 ## Types of unit test
 If you are unsure whether your test is simple enough, ask yourself if your test falls into one of these categories and if your test contains two or more then you'll be sure that your test is asserting too much:
@@ -120,6 +127,60 @@ A state test validates that your operation changes state as it should. One examp
 ### Interaction test
 An interaction test verifies that invoking a certain method calls specific other methods (once, twice etc). An interaction test for saving a TodoItem can check whether ValidateTodoItem was called exactly once, and if the SaveChanges on the Database layer got called.
 
+### Defining your unit test
+What is your test doing? Is your test verifying a bit of business logic as well as checking state? Or maybe you're checking that states changes whilst asserting that certain methods were hit?
+
+If your test falls into more than one category then you probably should split up the test into multiple tests: one for each type
+
 ## Do I have enough coverage?
-* Important to test business rules
-* Test multiple happy and sad scenarions. Don't just test the successful path, try to think of all the (sad) scenarios that can cause failure like logging in with wrong credentials or not providing an description for a TodoItem 
+When do I have enough coverage? It depends on what your testing strategy is of course and the system in testing of course. If it's a life critical application then maybe make sure you're covered in most areas.
+
+In any case, you can ask yourself the following to get an indication that you've got the coverage you need:
+* Have you tested business rules? This is important. If you can't test them all, then map out which ones are the most riskiest and most prone to failure
+* Have you tested all the happy and sad scenarions? Don't just test the successful path, try to think of all the (sad) scenarios that can cause failure like logging in with wrong credentials or not providing an description for a TodoItem when saving to database 
+
+## Writing a unit test
+
+### Arrange, act and assert
+The Arrange, act and assert pattern provides a consistent pattern for you to use in your tests.
+
+Your test method is grouped into these three parts:
+#### Arrange
+This is the place where you setup your test: Your initial conditions, dependencies and instances needed to perform the test
+
+#### Act
+This is the place where you perform the actual test. This is usally a one-liner like `var result = Instance.DoSomething(initialCondition);`
+
+#### Assert
+This is the part where you assert that the result is the expected result.
+
+#### How does that look like?
+All the examples follow this pattern so take a look at your language of choice.
+
+```csharp
+public void SaveTodoItem_WithValidTitleAndDescription_ReturnsTodoItemWithGeneratedIdValue()
+{
+    // Arrange
+    var todoItem = GetTodoItemWithTitleAndDescription(title: "Update README.md", description: "Organize it better dude!");
+
+    var todoItemService = GetMockedTodoItemService();
+
+    // Act
+    var savedTodoItem = todoItemService.SaveTodoItem(todoItem);
+
+    // Assert
+    Assert.IsNotNull(savedTodoItem.Id);
+}
+```
+
+### Stubs, mocks and fakes
+
+* Stubs: A substitute for a dependency in the code under test that allows the code to compile and the dependency to return data as specified by the test but importantly cannot itself directly make a test fail
+* Mocks: A substitute for a dependency in the code under test that knows how many times each of its methods were called an in what order so that it can validate an assumption about how the dependency was used and therefore make a test fail
+* Fakes: Generic term for stubs/mocks/faking externa dependencies
+
+# Resources
+
+This unit testing framework is based on the following guides, courses, tutorials etc:
+
+* [Effective C# Unit Testing for Enterprise Applications ](https://app.pluralsight.com/library/courses/csharp-unit-testing-enterprise-applications/table-of-contents)
